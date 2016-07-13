@@ -1,0 +1,30 @@
+version: '2'
+
+services:
+  mysql:
+    build: ./mysql
+    volumes:
+      - /var/lib/mysql:/var/lib/mysql
+    ports:
+        - "3306:3306"
+    environment:
+        MYSQL_DATABASE: db
+        MYSQL_USER: homestead
+        MYSQL_PASSWORD: secret
+        MYSQL_ROOT_PASSWORD: root
+
+  php:
+    build: ./php
+    volumes:
+      - /path/to/www:/var/www
+    links:
+      - mysql
+
+  nginx:
+    build: ./nginx
+    volumes_from:
+      - php
+    ports:
+      - "80:80"
+    links:
+      - php
